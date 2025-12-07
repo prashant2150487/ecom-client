@@ -4,7 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import Signup from "./pages/signUp";
 import Signin from "./pages/signIn/signIn";
 import Home from "./pages/home";
-import VerifyEmail from "./pages/verifyEmail/VerifyEmail";
+import VerifyEmail from "./pages/verifyEmail";
 
 function App() {
   return (

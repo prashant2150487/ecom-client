@@ -10,6 +10,7 @@ function VerifyEmail() {
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState(null)
   const token = searchParams.get('token')
+  console.log(token)
 
   useEffect(() => {
     const verifyEmailToken = async () => {
