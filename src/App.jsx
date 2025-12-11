@@ -2,9 +2,9 @@ import BaseLayout from "./components/baseLayout/BaseLayout";
 import "./App.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import Signup from "./pages/signUp";
-import Signin from "./pages/signIn/signIn";
 import Home from "./pages/home";
 import VerifyEmail from "./pages/verifyEmail";
+import Signin from "./components/signIn/signIn";
 
 function App() {
   return (

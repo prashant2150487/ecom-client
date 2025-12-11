@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react'
 import { useSearchParams, useNavigate } from 'react-router'
 import { verifyEmail } from '../../services/auth'
 import SuccessModal from '../../components/modals/SuccessModal'
+import { useDispatch } from 'react-redux'
+import { setIsLoginModalOpen } from '../../store/auth/authSlice'
 
 function VerifyEmail() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  const dispatch=useDispatch()
   const [isVerifying, setIsVerifying] = useState(true)
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState(null)
@@ -22,6 +25,7 @@ function VerifyEmail() {
 
       try {
         await verifyEmail(token)
+        dispatch(setIsLoginModalOpen(true))
         setIsSuccess(true)
         setIsVerifying(false)
       } catch (err) {

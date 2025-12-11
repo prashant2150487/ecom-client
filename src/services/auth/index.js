@@ -133,7 +133,7 @@ export const resetPassword = async (token, newPassword) => {
 // Verify email with token
 export const verifyEmail = async (token) => {
   try {
-    const response = await axiosInstance.post('/auth/token/verify/', {
+    const response = await axiosInstance.post('/auth/verify-email/', {
       token,
     })
     return response.data
