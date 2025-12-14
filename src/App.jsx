@@ -5,6 +5,7 @@ import Signup from "./pages/signUp";
 import Home from "./pages/home";
 import VerifyEmail from "./pages/verifyEmail";
 import Signin from "./components/signIn/signIn";
+import UserProfilePage from "./pages/myProfile";
 
 function App() {
   return (
@@ -18,6 +19,14 @@ function App() {
           element={
             <BaseLayout>
               <Home />
+            </BaseLayout>
+          }
+        />
+        <Route
+          path="/my-profile"
+          element={
+            <BaseLayout>
+              <UserProfilePage />
             </BaseLayout>
           }
         />
