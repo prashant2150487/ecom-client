@@ -1,10 +1,16 @@
 import { useDispatch } from "react-redux";
 import { Link } from "react-router";
-import { setIsLoginModalOpen } from "../../store/auth/authSlice";
+import { logout, setIsLoginModalOpen } from "../../store/auth/authSlice";
 
 
 export const UserProfile = ({ isAuthenticated }) => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+
+    const handleSignOut = () => {
+        dispatch(dispatch(logout()))
+        dispatch(setIsLoginModalOpen(false))
+    }
+
     return (
         <div className="relative group">
             <button className="p-2 text-gray-700 hover:text-blue-600 transition-colors">
@@ -19,7 +25,7 @@ export const UserProfile = ({ isAuthenticated }) => {
                     isAuthenticated ? (
                         <Link
                             to="/profile"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                         >
                             My Profile
                         </Link>
@@ -35,15 +41,26 @@ export const UserProfile = ({ isAuthenticated }) => {
                         </Link>
                     ) : null
                 }
+                {
+                    isAuthenticated ? (
+                        <button
+                            onClick={handleSignOut}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer font-bold"
+                        >
+                            Sign out
+                        </button>
+                    ) : null
+                }
 
                 {!isAuthenticated ? (
                     <div
                         onClick={() => dispatch(setIsLoginModalOpen(true))}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 border-t border-gray-200"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 border-t border-gray-200 cursor-pointer w-full"
                     >
                         Sign In
                     </div>
                 ) : null}
+
 
 
             </div>

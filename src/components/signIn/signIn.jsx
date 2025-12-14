@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { signin } from '../../services/auth'
-import { setCredentials } from '../../store/auth/authSlice'
+import { setCredentials, setIsLoginModalOpen } from '../../store/auth/authSlice'
 
 function Signin() {
   const navigate = useNavigate()
@@ -80,6 +80,7 @@ function Signin() {
         access_token: response.access_token,
         refresh_token: response.refresh_token,
       }))
+      dispatch(setIsLoginModalOpen(false))
 
       // Navigate to home page after successful signin
       navigate('/')
