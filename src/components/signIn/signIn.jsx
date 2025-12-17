@@ -73,17 +73,21 @@ function Signin() {
         email: formData.email,
         password: formData.password,
       })
+      if (response.success) {
+        // Store user data in Redux
+        dispatch(setCredentials({
+          user: response.data?.user || null,
+          access_token: response.data?.access || null,
+          refresh_token: response.data?.refresh || null,
+        }))
+        dispatch(setIsLoginModalOpen(false))
+        navigate('/')
 
-      // Store user data in Redux
-      dispatch(setCredentials({
-        user: response.user,
-        access_token: response.access_token,
-        refresh_token: response.refresh_token,
-      }))
-      dispatch(setIsLoginModalOpen(false))
+      }
+
+
 
       // Navigate to home page after successful signin
-      navigate('/')
     } catch (error) {
       // Handle API errors
       if (error.email) {
