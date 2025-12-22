@@ -73,12 +73,13 @@ function Signin() {
         email: formData.email,
         password: formData.password,
       })
+      console.log(response)
       if (response.success) {
         // Store user data in Redux
         dispatch(setCredentials({
-          user: response.data?.user || null,
-          access_token: response.data?.access || null,
-          refresh_token: response.data?.refresh || null,
+          user: response?.user || null,
+          access_token: response?.access || null,
+          refresh_token: response?.refresh || null,
         }))
         dispatch(setIsLoginModalOpen(false))
         navigate('/')

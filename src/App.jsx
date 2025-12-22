@@ -5,6 +5,7 @@ import Signup from "./pages/signUp";
 import Home from "./pages/home";
 import VerifyEmail from "./pages/verifyEmail";
 import Signin from "./components/signIn/signIn";
+import ForgotPassword from "./pages/forgotPassword";
 import UserProfilePage from "./pages/myProfile";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route
           path="/"
           element={
