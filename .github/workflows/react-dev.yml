@@ -1,0 +1,79 @@
+# name: React CI - Dev Branch
+
+# on:
+#   push:
+#     branches:
+#       - dev
+#   pull_request:
+#     branches:
+#       - dev
+
+# jobs:
+#   test-and-lint:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v4
+
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: "18"
+#           cache: "npm"
+
+#       - name: Install Dependencies
+#         run: npm install
+
+#       - name: Run Linting
+#         run: npm run lint
+
+#       - name: Run Type Check
+#         run: |
+#           npm list typescript && echo "TypeScript is configured" || echo "No TypeScript config"
+
+#       - name: Check for Security Vulnerabilities
+#         run: |
+#           npm audit --audit-level=moderate || true
+
+#       - name: Lint Report
+#         if: always()
+#         run: |
+#           echo "✓ Linting completed for dev branch"
+
+#   build:
+#     needs: test-and-lint
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v4
+
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: "18"
+#           cache: "npm"
+
+#       - name: Install Dependencies
+#         run: npm install
+
+#       - name: Build Application
+#         run: npm run build
+#         env:
+#           VITE_API_URL: ${{ secrets.DEV_API_URL || 'http://localhost:8000/api' }}
+
+#       - name: Upload Build Artifact
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: react-dev-build
+#           path: dist/
+#           retention-days: 7
+
+#       - name: Build Summary
+#         run: |
+#           echo "✓ Dev build successful"
+#           echo "Build time: $(date)"
+#           echo "Branch: dev"
+#           echo "Commit: ${{ github.sha }}"
+#           echo "Build output available in dist/"

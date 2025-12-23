@@ -35,7 +35,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => {
     // Return response data directly
-    return response.data
+    return response
   },
   (error) => {
     // Handle common errors
