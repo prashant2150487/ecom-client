@@ -78,8 +78,8 @@ function Signin() {
         // Store user data in Redux
         dispatch(setCredentials({
           user: response?.user || null,
-          access_token: response?.access || null,
-          refresh_token: response?.refresh || null,
+          access_token: response?.data?.access || null,
+          refresh_token: response?.data?.refresh || null,
         }))
         dispatch(setIsLoginModalOpen(false))
         navigate('/')

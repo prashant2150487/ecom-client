@@ -18,8 +18,7 @@ const authSlice = createSlice({
   initialState: getInitialState(),
   reducers: {
     setCredentials: (state, action) => {
-      const { user, access_token, refresh_token } = action.payload;
-      state.user = user || null;
+      const { access_token, refresh_token } = action.payload;
       state.token = access_token;
       state.refreshToken = refresh_token || null;
       state.isAuthenticated = true;
@@ -27,6 +26,9 @@ const authSlice = createSlice({
       localStorage.setItem("refresh_token", refresh_token);
 
 
+    },
+    updateUser: (state, action) => {
+      state.user = action.payload;
     },
     setIsLoginModalOpen: (state, action) => {
       state.isLoginModalOpen = action.payload;
@@ -40,7 +42,6 @@ const authSlice = createSlice({
       // Clear localStorage
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
-      localStorage.removeItem("user");
     },
 
 

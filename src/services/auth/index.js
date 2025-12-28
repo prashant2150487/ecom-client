@@ -1,3 +1,4 @@
+import axios from 'axios'
 import axiosInstance from '../../config/axios'
 
 /**
@@ -29,7 +30,7 @@ export const signin = async (credentials) => {
       email: credentials.email,
       password: credentials.password,
     })
-    
+
     // Store tokens if provided
     if (response.data.access_token) {
       localStorage.setItem('access_token', response.data.access_token)
@@ -37,7 +38,7 @@ export const signin = async (credentials) => {
     if (response.data.refresh_token) {
       localStorage.setItem('refresh_token', response.data.refresh_token)
     }
-    
+
     return response.data
   } catch (error) {
     throw error.response?.data || error.message
@@ -67,15 +68,15 @@ export const refreshToken = async () => {
     if (!refreshToken) {
       throw new Error('No refresh token available')
     }
-    
+
     const response = await axiosInstance.post('/auth/refresh/', {
       refresh: refreshToken,
     })
-    
+
     if (response.data.access_token) {
       localStorage.setItem('access_token', response.data.access_token)
     }
-    
+
     return response.data
   } catch (error) {
     // Clear tokens if refresh fails
@@ -142,3 +143,16 @@ export const verifyEmail = async (token) => {
   }
 }
 
+
+export const getUserProfile = async () => {
+  try {
+    const response = await axiosInstance.get('/auth/profile/');
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message
+  }
+}
+export const updateUserProdile=async (userData)=>{
+  const response=await axiosInstance.put('/auth/profile/update/', userData)
+  return response.data
+}

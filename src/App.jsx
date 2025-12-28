@@ -7,6 +7,7 @@ import VerifyEmail from "./pages/verifyEmail";
 import Signin from "./components/signIn/signIn";
 import ForgotPassword from "./pages/forgotPassword";
 import UserProfilePage from "./pages/myProfile";
+import { ProtectedRoutes } from "./routes/protectedRoutes";
 
 function App() {
   return (
@@ -28,7 +29,9 @@ function App() {
           path="/my-profile"
           element={
             <BaseLayout>
-              <UserProfilePage />
+              <ProtectedRoutes>
+                <UserProfilePage />
+              </ProtectedRoutes>
             </BaseLayout>
           }
         />
