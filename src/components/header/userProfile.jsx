@@ -20,12 +20,12 @@ export const UserProfile = ({ isAuthenticated }) => {
             </button>
 
             {/* Dropdown Menu */}
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+            <div className="absolute text-gray-200 right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                 {
                     isAuthenticated ? (
                         <Link
                             to="/my-profile"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                            className="block px-4 py-2 text-sm  hover:bg-gray-100 cursor-pointer text-gray-700"
                         >
                             My Profile
                         </Link>
@@ -37,7 +37,47 @@ export const UserProfile = ({ isAuthenticated }) => {
                             to="/orders"
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
-                            My Orders
+                            Orders
+                        </Link>
+                    ) : null
+                }
+                {
+                    isAuthenticated ? (
+                        <Link
+                            to="/wishlist"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                            Wishlist
+                        </Link>
+                    ) : null
+                }
+                {
+                    isAuthenticated ? (
+                        <Link
+                            to="/coupons"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                            Coupons
+                        </Link>
+                    ) : null
+                }
+                {
+                    isAuthenticated ? (
+                        <Link
+                            to="/gift-cards"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                            Gift Cards
+                        </Link>
+                    ) : null
+                }
+                {
+                    isAuthenticated ? (
+                        <Link
+                            to="/notifications"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                            Notifications
                         </Link>
                     ) : null
                 }
@@ -49,17 +89,13 @@ export const UserProfile = ({ isAuthenticated }) => {
                         >
                             Sign out
                         </button>
-                    ) : null
-                }
-
-                {!isAuthenticated ? (
-                    <div
+                    ) : <div
                         onClick={() => dispatch(setIsLoginModalOpen(true))}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 border-t border-gray-200 cursor-pointer w-full"
+                        className="block px-4 py-2 text-sm w-full hover:bg-gray-100 border-t border-gray-200 cursor-pointer w-full"
                     >
                         Sign In
                     </div>
-                ) : null}
+                }
 
 
 
