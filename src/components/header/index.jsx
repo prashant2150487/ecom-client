@@ -5,15 +5,16 @@ import { useSelector } from 'react-redux'
 function Header() {
 
   const { isAuthenticated, user } = useSelector((state) => state.auth)
-  console.log(isAuthenticated,"user")
+  console.log(isAuthenticated, "user")
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex-shrink-0">
+          <div className="flex shrink-0">
             <Link to="/" className="flex items-center">
-              <span className="text-2xl font-bold text-blue-600">E-Shop</span>
+              <img src={"https://www.goodearth.in/static/images/GE%20logo%202024-02.abed146b3f41d477da910f27cef87af6.svg"}
+                alt="ge-logo" className="w-22" />
             </Link>
           </div>
 
@@ -27,10 +28,10 @@ function Header() {
                 Home
               </Link>
               <Link
-                to="/products"
+                to="/apparel"
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               >
-                Products
+                APPAREL
               </Link>
               <Link
                 to="/about"
@@ -39,10 +40,10 @@ function Header() {
                 About
               </Link>
               <Link
-                to="/contact"
+                to="/gifting"
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               >
-                Contact
+                Gifting
               </Link>
             </div>
           </div>
@@ -63,9 +64,9 @@ function Header() {
               </svg>
               <span className="absolute top-0 right-0 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
             </button>
-            <UserProfile isAuthenticated={isAuthenticated} user={user}/>
+            <UserProfile isAuthenticated={isAuthenticated} user={user} />
 
-            
+
 
             {/* Mobile Menu Button */}
             <button className="md:hidden p-2 text-gray-700 hover:text-blue-600 transition-colors">

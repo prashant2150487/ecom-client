@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { signin } from '../../services/auth'
 import { setCredentials, setIsLoginModalOpen } from '../../store/auth/authSlice'
+import { Input } from '../uiElement/input'
 
 function Signin() {
   const navigate = useNavigate()
@@ -109,9 +110,12 @@ function Signin() {
     <div className="min-h-screen fixed inset-0 z-50 overflow-hidden flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className='flex justify-center border-b border-gray-300 pb-2 mb-4'>
+            <img src="https://www.goodearth.in/static/images/GE%20logo%202024-02.abed146b3f41d477da910f27cef87af6.svg" alt="logo" className='w-30' />
+          </div>
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
-            <p className="text-gray-600">Sign in to your account</p>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Welcome</h2>
+            <p className="text-gray-600 text-sm">Enter your email address to register or sign in.</p>
           </div>
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -127,9 +131,19 @@ function Signin() {
               </div>
             )}
 
+
             <div className="space-y-4">
+
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                <Input
+                  name="email"
+                  placeholder="Enter your email" 
+                  fullWidth
+                  className="bg-red border-amber-100"
+                  label="Email"
+                  required={true}
+                />
+                {/* <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                   Email Address
                 </label>
                 <input
@@ -146,7 +160,7 @@ function Signin() {
                 />
                 {errors.email && (
                   <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                )}
+                )} */}
               </div>
 
               <div>
