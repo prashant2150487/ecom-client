@@ -1,6 +1,24 @@
 import { Link } from 'react-router'
 import { UserProfile } from './userProfile'
 import { useSelector } from 'react-redux'
+const headerData = [
+  {
+    tittle: "Home",
+    path: "/home"
+  },
+  {
+    tittle: "APPAREL",
+    path: "/apparel"
+  },
+  {
+    tittle: "About",
+    path: "/about"
+  },
+  {
+    tittle: "Gifting",
+    path: "/gifting"
+  }
+]
 
 function Header() {
 
@@ -21,30 +39,18 @@ function Header() {
           {/* Navigation Links */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
-              <Link
-                to="/"
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-              >
-                Home
-              </Link>
-              <Link
-                to="/apparel"
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-              >
-                APPAREL
-              </Link>
-              <Link
-                to="/about"
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-              >
-                About
-              </Link>
-              <Link
-                to="/gifting"
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-              >
-                Gifting
-              </Link>
+              {
+                headerData.map((item, index) => (
+                  <Link
+                    key={index}
+                    to={item.path}
+                    className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm transition-colors"
+                  >
+                    {item.tittle}
+                  </Link>
+                ))
+              }
+
             </div>
           </div>
 
