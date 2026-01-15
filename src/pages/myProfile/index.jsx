@@ -1,311 +1,445 @@
-import React, { useState, useEffect } from 'react';
-import { Edit2, Save, X, Mail, MapPin, Briefcase, Calendar, User } from 'lucide-react';
-import { getUserProfile, updateUserProdile } from '../../services/auth';
-
+import React, { useState, useEffect } from "react";
+import {
+  Edit2,
+  Save,
+  X,
+  Mail,
+  MapPin,
+  Briefcase,
+  Calendar,
+  User,
+  PhoneCall,
+} from "lucide-react";
+import { getUserProfile, updateUserProdile } from "../../services/auth";
+import { ProfileTabs } from "./profileTabs";
+import { PersonalTab } from "./personalTab";
+import { AddressTab } from "./addressTab";
+import { OrdersTab } from "./ordersTab";
 
 const UserProfilePage = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [profile, setProfile] = useState({
-    name: '',
-    first_name: '',
-    last_name: '',
-    email: '',
-    location: '',
-    title: '',
-    joinDate: '',
-    bio: '',
-    avatar: '👨‍💼',
-    role: ""
-  });
-
-  const [editData, setEditData] = useState({
-    first_name: '',
-    last_name: '',
-    location: '',
-    title: '',
-    bio: ''
-  });
-
-  const handleEdit = () => {
-    setEditData({
-      first_name: profile.first_name,
-      last_name: profile.last_name,
-      location: profile.location,
-      title: profile.title,
-      bio: profile.bio
-    });
-    setIsModalOpen(true);
-  };
-
-  const handleSave = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await updateUserProdile({
-        first_name: editData.first_name,
-        last_name: editData.last_name,
-        location: editData.location,
-        title: editData.title,
-        bio: editData.bio
-      });
-
-      // Refresh profile after update
-      await fetchProfile();
-      setIsModalOpen(false);
-      console.log('Profile updated successfully');
-    } catch (error) {
-      console.error('Failed to update profile:', error);
-    }
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleInputChange = (field, value) => {
-    setEditData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
-  const handleInputFieldChange = (e) => {
-    const { name, value } = e.target;
-    handleInputChange(name, value);
-  };
+  const [profile, setProfile] = useState(null);
+  const [activeTab, setActiveTab] = useState("personal");
 
   const fetchProfile = async () => {
     try {
       const response = await getUserProfile();
-      console.log(response);
+      if (response.success) {
+        setProfile(response.data);
+      }
+
       // Map API response to profile structure
-      const mappedProfile = {
-        name: `${response.data.first_name || ''} ${response.data.last_name || ''}`.trim() || 'User',
-        first_name: response.data.first_name || '',
-        last_name: response.data.last_name || '',
-        email: response.data.email || '',
-        location: response.data.location || 'Not specified',
-        title: response.data.title || 'Not specified',
-        joinDate: response.data.created_at ? new Date(response.data.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Unknown',
-        bio: response.data.bio || 'No bio available',
-        avatar: response.data.avatar || '👨‍💼',
-        role: response.data.role || 'Not specified',
-      };
-      setProfile(mappedProfile);
     } catch (error) {
-      console.error('Failed to fetch profile:', error);
+      console.error("Failed to fetch profile:", error);
     }
-  }
-
+  };
   useEffect(() => {
-    fetchProfile()
-  }, [])
-
-
-
+    fetchProfile();
+  }, []);
+  console.log(profile, "profile");
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-8 px-4">
-      <div className="max-w-2xl mx-auto">
-        {/* Header Card */}
-        <div className="bg-gradient-to-r from-slate-800 to-slate-700 rounded-t-3xl p-8 shadow-2xl">
-          <div className="flex items-end gap-6">
-            <div className="text-8xl">{profile.avatar}</div>
-            <div className="flex-1">
-              <h1 className="text-4xl font-bold text-white mb-2">{profile.name}</h1>
-              <h5 className="text-lg text-slate-300 flex items-center gap-2">Role: {profile.role}</h5>
-              <p className="text-lg text-slate-300 flex items-center gap-2 mt-2">
-                <Briefcase size={18} /> {profile.title}
-              </p>
-            </div>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8 px-4">
+      <div className="max-w-3xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-slate-900 mb-1">My Profile</h1>
+          <p className="text-slate-500 text-sm">
+            Manage your account and preferences
+          </p>
         </div>
 
-        {/* Main Profile Card */}
-        <div className="bg-slate-800 rounded-b-3xl shadow-2xl">
-          {/* Action Buttons */}
-          <div className="border-b border-slate-700 px-8 py-4 flex justify-end gap-3">
-            <button
-              onClick={handleEdit}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-200"
-              aria-label="Edit profile"
-            >
-              <Edit2 size={18} /> Edit Profile
-            </button>
+        {/* Success Message */}
+        {/* {successMessage && (
+          <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl animate-pulse">
+            <p className="text-green-700 font-medium text-sm">
+              {successMessage}
+            </p>
+          </div>
+        )} */}
+
+        {/* Main Card */}
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-100">
+          {/* Profile Header */}
+          <div className="bg-gradient-to-r from-blue-500 to-purple-500 px-8 py-6 text-white">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <img
+                  // src={profileImage}
+                  alt="Profile"
+                  className="w-20 h-20 rounded-full border-4 border-white object-cover shadow-md"
+                />
+                {/* {isEditing && (
+                  <label className="absolute bottom-0 right-0 bg-white rounded-full p-2 cursor-pointer hover:bg-gray-100 transition shadow-md">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                    <Camera size={16} className="text-blue-500" />
+                  </label>
+                )} */}
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold">
+                  {profile?.first_name} {profile?.last_name}
+                </h2>
+                <p className="text-blue-100 text-sm">{profile?.email}</p>
+                <div className="flex gap-3 mt-2 text-sm">
+                  {profile?.is_email_verified && (
+                    <span className="inline-flex items-center gap-1 rounded-full border  px-3 py-1 text-sm font-medium text-white">
+                      <Mail className="text-sm" size={16} />
+                      verified
+                    </span>
+                  )}
+                  {profile?.is_phone_verified && (
+                    <span className="inline-flex items-center gap-1 rounded-full border  px-3 py-1 text-sm font-medium text-white">
+                      <PhoneCall className="text-sm" size={16} />
+                      verified
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
 
+          {/* Tabs */}
+          <ProfileTabs activeTab={activeTab} setActiveTab={setActiveTab}/>
+          
+
           {/* Content */}
-          <div className="p-8 space-y-6">
-            {/* Contact Information */}
-            <div className="space-y-4">
-              <h2 className="text-xl font-bold text-white mb-4">Contact Information</h2>
-
-              <div className="bg-slate-700 rounded-xl p-4 flex items-center gap-4">
-                <Mail className="text-blue-400 flex-shrink-0" size={20} />
-                <div className="flex-1">
-                  <p className="text-sm text-slate-400">Email</p>
-                  <p className="text-white font-semibold">{profile.email}</p>
+          <div className="p-8">
+            {/* Personal Tab */}
+            {
+              activeTab === "personal" && <PersonalTab />
+            }
+            {
+              activeTab === "addresses" && <AddressTab profile={profile}/>
+            }
+            {
+              activeTab === "orders" && <OrdersTab />
+            }
+            {/* {activeTab === "personal" && (
+              <div>
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">
+                      First Name
+                    </label>
+                    <input
+                      type="text"
+                      name="first_name"
+                      value={
+                        isEditing ? editData.first_name : formData.first_name
+                      }
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg disabled:bg-slate-50 disabled:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">
+                      Last Name
+                    </label>
+                    <input
+                      type="text"
+                      name="last_name"
+                      value={
+                        isEditing ? editData.last_name : formData.last_name
+                      }
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg disabled:bg-slate-50 disabled:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={isEditing ? editData.email : formData.email}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg disabled:bg-slate-50 disabled:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone_number"
+                      value={
+                        isEditing
+                          ? editData.phone_number
+                          : formData.phone_number
+                      }
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg disabled:bg-slate-50 disabled:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                    />
+                  </div>
                 </div>
               </div>
+            )} */}
 
-              <div className="bg-slate-700 rounded-xl p-4 flex items-center gap-4">
-                <MapPin className="text-blue-400 flex-shrink-0" size={20} />
-                <div className="flex-1">
-                  <p className="text-sm text-slate-400">Location</p>
-                  <p className="text-white font-semibold">{profile.location}</p>
+            {/* Settings Tab */}
+            {/* {activeTab === "settings" && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-semibold text-slate-900 mb-4">
+                    Preferences
+                  </h3>
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">
+                        Language
+                      </label>
+                      <select
+                        name="preferred_language"
+                        value={
+                          isEditing
+                            ? editData.preferred_language
+                            : formData.preferred_language
+                        }
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                        className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg disabled:bg-slate-50 disabled:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                      >
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">
+                        Currency
+                      </label>
+                      <select
+                        name="preferred_currency"
+                        value={
+                          isEditing
+                            ? editData.preferred_currency
+                            : formData.preferred_currency
+                        }
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                        className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg disabled:bg-slate-50 disabled:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                      >
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="INR">INR</option>
+                        <option value="GBP">GBP</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t border-slate-200 pt-6">
+                  <h3 className="text-base font-semibold text-slate-900 mb-4">
+                    Notifications
+                  </h3>
+                  <div className="space-y-3">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="newsletter_subscription"
+                        checked={
+                          isEditing
+                            ? editData.newsletter_subscription
+                            : formData.newsletter_subscription
+                        }
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                        className="w-5 h-5 rounded border-slate-300 text-blue-500 focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                      />
+                      <span className="text-sm text-slate-700">
+                        Subscribe to newsletter
+                      </span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="email_notifications"
+                        checked={
+                          isEditing
+                            ? editData.email_notifications
+                            : formData.email_notifications
+                        }
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                        className="w-5 h-5 rounded border-slate-300 text-blue-500 focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                      />
+                      <span className="text-sm text-slate-700">
+                        Email notifications
+                      </span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="sms_notifications"
+                        checked={
+                          isEditing
+                            ? editData.sms_notifications
+                            : formData.sms_notifications
+                        }
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                        className="w-5 h-5 rounded border-slate-300 text-blue-500 focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                      />
+                      <span className="text-sm text-slate-700">
+                        SMS notifications
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="border-t border-slate-200 pt-6">
+                  <h3 className="text-base font-semibold text-slate-900 mb-4">
+                    Privacy
+                  </h3>
+                  <div className="space-y-3">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="profile_visibility"
+                        checked={
+                          isEditing
+                            ? editData.profile_visibility
+                            : formData.profile_visibility
+                        }
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                        className="w-5 h-5 rounded border-slate-300 text-blue-500 focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                      />
+                      <span className="text-sm text-slate-700">
+                        Make profile visible
+                      </span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="show_email"
+                        checked={
+                          isEditing ? editData.show_email : formData.show_email
+                        }
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                        className="w-5 h-5 rounded border-slate-300 text-blue-500 focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                      />
+                      <span className="text-sm text-slate-700">
+                        Show email publicly
+                      </span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="show_phone_number"
+                        checked={
+                          isEditing
+                            ? editData.show_phone_number
+                            : formData.show_phone_number
+                        }
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                        className="w-5 h-5 rounded border-slate-300 text-blue-500 focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                      />
+                      <span className="text-sm text-slate-700">
+                        Show phone publicly
+                      </span>
+                    </label>
+                  </div>
                 </div>
               </div>
+            )} */}
 
-              <div className="bg-slate-700 rounded-xl p-4 flex items-center gap-4">
-                <Calendar className="text-blue-400 flex-shrink-0" size={20} />
-                <div className="flex-1">
-                  <p className="text-sm text-slate-400">Member Since</p>
-                  <p className="text-white font-semibold">{profile.joinDate}</p>
-                </div>
+            {/* Addresses Tab */}
+            {/* {activeTab === "addresses" && (
+              <div className="space-y-4">
+                {addresses.map((addr) => (
+                  <div
+                    key={addr.id}
+                    className="border border-slate-200 rounded-lg p-4"
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                      <h4 className="font-semibold text-slate-900">
+                        {addr.full_name}
+                      </h4>
+                      <div className="flex gap-2">
+                        {addr.is_default_shipping && (
+                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                            Default
+                          </span>
+                        )}
+                        <button
+                          onClick={() => deleteAddress(addr.id)}
+                          className="text-red-500 hover:text-red-700 text-sm font-medium"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                    <p className="text-sm text-slate-600 mb-2">
+                      {addr.address_line_1}
+                    </p>
+                    <p className="text-sm text-slate-600 mb-3">
+                      {addr.city}, {addr.state} {addr.postal_code},{" "}
+                      {addr.country}
+                    </p>
+                    <p className="text-sm text-slate-600 mb-3">
+                      Phone: {addr.phone_number}
+                    </p>
+                    {!addr.is_default_shipping && (
+                      <button
+                        onClick={() => setDefaultAddress(addr.id)}
+                        className="text-blue-500 hover:text-blue-700 text-sm font-medium"
+                      >
+                        Set as default
+                      </button>
+                    )}
+                  </div>
+                ))}
               </div>
-            </div>
+            )} */}
 
-            {/* Bio Section */}
-            <div className="space-y-3">
-              <h2 className="text-xl font-bold text-white">About</h2>
-              <div className="bg-slate-700 rounded-xl p-4">
-                <p className="text-slate-200 leading-relaxed">{profile.bio}</p>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 pt-4">
-              <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl p-4 text-center">
-                <p className="text-3xl font-bold text-white">247</p>
-                <p className="text-blue-100 text-sm mt-1">Projects</p>
-              </div>
-              <div className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl p-4 text-center">
-                <p className="text-3xl font-bold text-white">1.2K</p>
-                <p className="text-purple-100 text-sm mt-1">Followers</p>
-              </div>
-              <div className="bg-gradient-to-br from-pink-600 to-pink-700 rounded-xl p-4 text-center">
-                <p className="text-3xl font-bold text-white">89</p>
-                <p className="text-pink-100 text-sm mt-1">Following</p>
-              </div>
-            </div>
+            {/* Action Buttons */}
+            {/* <div className="flex gap-3 mt-8 pt-6 border-t border-slate-200">
+              {!isEditing ? (
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="flex-1 px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:shadow-lg transition font-semibold text-sm"
+                >
+                  Edit Profile
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="flex-1 flex items-center justify-center gap-2 px-6 py-2.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-semibold text-sm disabled:opacity-60"
+                  >
+                    <Save size={18} />
+                    {isSaving ? "Saving..." : "Save"}
+                  </button>
+                  <button
+                    onClick={handleCancel}
+                    disabled={isSaving}
+                    className="flex-1 flex items-center justify-center gap-2 px-6 py-2.5 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition font-semibold text-sm disabled:opacity-60"
+                  >
+                    <X size={18} />
+                    Cancel
+                  </button>
+                </>
+              )}
+            </div> */}
           </div>
         </div>
       </div>
-
-      {/* Edit Profile Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-slate-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            {/* Modal Header */}
-            <div className="bg-gradient-to-r from-slate-700 to-slate-600 p-6 rounded-t-2xl flex items-center justify-between sticky top-0 z-10">
-              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                <User size={24} />
-                Edit Profile
-              </h2>
-              <button
-                onClick={handleCancel}
-                className="text-slate-300 hover:text-white transition-colors"
-                aria-label="Close modal"
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            {/* Modal Form */}
-            <form onSubmit={handleSave} className="p-6 space-y-6">
-              {/* Name Fields */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold text-slate-300 mb-2">
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    name="first_name"
-                    value={editData.first_name}
-                    onChange={handleInputFieldChange}
-                    className="w-full bg-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                    placeholder="Enter first name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-slate-300 mb-2">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    name="last_name"
-                    value={editData.last_name}
-                    onChange={handleInputFieldChange}
-                    className="w-full bg-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                    placeholder="Enter last name"
-                  />
-                </div>
-              </div>
-
-              {/* Title */}
-              <div>
-                <label className="block text-sm font-semibold text-slate-300 mb-2">
-                  Job Title
-                </label>
-                <input
-                  type="text"
-                  name="title"
-                  value={editData.title}
-                  onChange={handleInputFieldChange}
-                  className="w-full bg-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                  placeholder="Enter job title"
-                />
-              </div>
-
-              {/* Location */}
-              <div>
-                <label className="block text-sm font-semibold text-slate-300 mb-2">
-                  Location
-                </label>
-                <input
-                  type="text"
-                  name="location"
-                  value={editData.location}
-                  onChange={handleInputFieldChange}
-                  className="w-full bg-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                  placeholder="Enter location"
-                />
-              </div>
-
-              {/* Bio */}
-              <div>
-                <label className="block text-sm font-semibold text-slate-300 mb-2">
-                  About / Bio
-                </label>
-                <textarea
-                  name="bio"
-                  value={editData.bio}
-                  onChange={handleInputFieldChange}
-                  className="w-full bg-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
-                  rows={5}
-                  placeholder="Tell us about yourself..."
-                />
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="submit"
-                  className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200"
-                >
-                  <Save size={18} /> Save Changes
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCancel}
-                  className="flex-1 flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200"
-                >
-                  <X size={18} /> Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
