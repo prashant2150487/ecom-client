@@ -7,6 +7,7 @@ import {
   setIsLoginModalOpen,
 } from "../../store/auth/authSlice";
 import { Input } from "../uiElement/input";
+import { X } from "lucide-react";
 
 function Signin() {
   const navigate = useNavigate();
@@ -123,7 +124,8 @@ function Signin() {
 
   return (
     <div className="min-h-screen fixed inset-0 z-50 overflow-hidden flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+      <div className="max-w-md w-full space-y-8 relative">
+        <X className="absolute top-4 right-4 cursor-pointer text-gray-500 hover:text-gray-700" onClick={() => dispatch(setIsLoginModalOpen(false))}/>
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="flex justify-center border-b border-gray-300 pb-2 mb-4">
             <img
