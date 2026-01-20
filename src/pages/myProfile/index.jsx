@@ -10,7 +10,7 @@ import {
   User,
   PhoneCall,
 } from "lucide-react";
-import { getUserProfile, updateUserProdile } from "../../services/auth";
+import { getUserProfile, updateUserProfile } from "../../services/auth";
 import { ProfileTabs } from "./profileTabs";
 import { PersonalTab } from "./personalTab";
 import { AddressTab } from "./addressTab";
@@ -31,6 +31,26 @@ const UserProfilePage = () => {
     } catch (error) {
       console.error("Failed to fetch profile:", error);
     }
+  };
+  const handleUpdate = async () => {
+    if(!profile){
+      return;
+    }
+    const res = await updateUserProfile({
+      first_name: profile.first_name,
+      last_name: profile.last_name,
+      phone_number: profile.phone_number,
+    });
+    console.log(res, "res");
+    if (res.success) {
+      setProfile(res.data);
+      // toast.success("Profile updated successfully");
+      fetchProfile()
+    }
+  };
+  const handleChange = (e) => {
+    console.log(e.target.name, e.target.value);
+    setProfile({ ...profile, [e.target.name]: e.target.value });
   };
   useEffect(() => {
     fetchProfile();
@@ -103,21 +123,17 @@ const UserProfilePage = () => {
           </div>
 
           {/* Tabs */}
-          <ProfileTabs activeTab={activeTab} setActiveTab={setActiveTab}/>
-          
+          <ProfileTabs
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
 
           {/* Content */}
           <div className="p-8">
             {/* Personal Tab */}
-            {
-              activeTab === "personal" && <PersonalTab />
-            }
-            {
-              activeTab === "addresses" && <AddressTab profile={profile}/>
-            }
-            {
-              activeTab === "orders" && <OrdersTab />
-            }
+            {activeTab === "personal" && <PersonalTab profile={profile} onChange={handleChange} />}
+            {activeTab === "addresses" && <AddressTab profile={profile} />}
+            {activeTab === "orders" && <OrdersTab />}
             {/* {activeTab === "personal" && (
               <div>
                 <div className="grid grid-cols-2 gap-4 mb-6">
@@ -437,6 +453,17 @@ const UserProfilePage = () => {
                 </>
               )}
             </div> */}
+            <div className="flex gap-1 mt-4">
+              <button className="text-black flex items-center gap-2 bg-red-500 px-4 py-2 rounded">
+                Cancel
+              </button>
+              <button
+                className="text-black flex items-center gap-2 bg-green-500 px-4 py-2 rounded"
+                onClick={handleUpdate}
+              >
+                Update
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { Bell, MapPin, User } from "lucide-react";
 
-export const ProfileTabs = ({ activeTab, setActiveTab }) => {
+export const ProfileTabs = ({ activeTab, setActiveTab, }) => {
   return (
     <div className="border-b border-slate-200 px-8 flex gap-8">
       <button

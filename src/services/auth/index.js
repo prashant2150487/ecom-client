@@ -152,7 +152,7 @@ export const getUserProfile = async () => {
     throw error.response?.data || error.message
   }
 }
-export const updateUserProdile=async (userData)=>{
+export const updateUserProfile=async (userData)=>{
   const response=await axiosInstance.put('/auth/profile/update/', userData)
   return response.data
 }

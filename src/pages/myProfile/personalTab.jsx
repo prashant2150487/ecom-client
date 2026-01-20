@@ -1,16 +1,16 @@
 import { Input } from "../../components/uiElement/input";
 
-export const PersonalTab = () => {
+export const PersonalTab = ({ profile, onChange }) => {
     return (
         <div className="text-black">
             <div className="flex flex-col gap-4 w-full">
                 <div className="flex gap-4 w-full">
-                    <Input placeholder="First Name" label="First Name" type="text" size="sm" fullWidth />
-                    <Input placeholder="Last Name" label="Last Name" type="text" size="sm" fullWidth/>
+                    <Input name="first_name" placeholder="First Name" label="First Name" type="text" size="sm" fullWidth value={profile?.first_name ?? ""} onChange={onChange}/>
+                    <Input name="last_name" placeholder="Last Name" label="Last Name" type="text" size="sm" fullWidth value={profile?.last_name ?? ""} onChange={onChange}/>
                 </div>
                 <div className="flex gap-4">
-                    <Input placeholder="Email" label="Email" type="email" size="sm" fullWidth/>
-                    <Input placeholder="Phone Number" label="Phone Number" type="number" size="sm" fullWidth/>
+                    <Input name="email" placeholder="Email" label="Email" type="email" size="sm" fullWidth value={profile?.email ?? ""} onChange={onChange}/>
+                    <Input name="phone_number" placeholder="Phone Number" label="Phone Number" type="text" size="sm" fullWidth value={profile?.phone_number ?? ""} onChange={onChange}/>
                 </div>
             </div>
         </div>
