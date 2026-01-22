@@ -15,6 +15,7 @@ export const Input = ({
   value,
   maxLength,
   minLength,
+  checkboxLabel = "",
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -73,6 +74,11 @@ export const Input = ({
               <Eye className="w-5 h-5 text-black" />
             )}
           </button>
+        )}
+        {type === "checkbox" && (
+          <label className="ml-2 text-sm font-medium text-gray-700">
+            {checkboxLabel}
+          </label>
         )}
       </div>
       {error && <p>{error}</p>}
