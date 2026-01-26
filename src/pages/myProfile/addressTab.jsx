@@ -1,6 +1,7 @@
+import Checkbox from "../../components/uiElement/checkbox";
 import { Input } from "../../components/uiElement/input";
 
-export const AddressTab = ({ profile }) => {
+export const AddressTab = ({ profile , onChange}) => {
   console.log(profile, "pp");
   return (
     <div className="text-black">
@@ -53,19 +54,17 @@ export const AddressTab = ({ profile }) => {
             label="Phone Number"
           />
           <div className="flex gap-4">
-            <Input
-              type="checkbox"
+            <Checkbox
               name="is_default_billing"
               checked={address.is_default_billing}
-              onChange={(e) => console.log(e.target.value)}
-              checkboxLabel="Is Default Billing"
+              onChange={(e)=>onChange(e, address.id)}
+              label="Is Default Billing"
             />
-            <Input
-              type="checkbox"
+            <Checkbox
               name="is_default_shipping"
               checked={address.is_default_shipping}
-              onChange={(e) => console.log(e.target.value)}
-              checkboxLabel="Is Default Shipping"
+              onChange={(e)=> onChange(e,address.id)}
+              label="Is Default Shipping"
             />
           </div>
         </div>

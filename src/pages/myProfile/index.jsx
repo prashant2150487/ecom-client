@@ -33,7 +33,7 @@ const UserProfilePage = () => {
     }
   };
   const handleUpdate = async () => {
-    if(!profile){
+    if (!profile) {
       return;
     }
     const res = await updateUserProfile({
@@ -45,12 +45,21 @@ const UserProfilePage = () => {
     if (res.success) {
       setProfile(res.data);
       // toast.success("Profile updated successfully");
-      fetchProfile()
+      fetchProfile();
     }
   };
   const handleChange = (e) => {
     console.log(e.target.name, e.target.value);
     setProfile({ ...profile, [e.target.name]: e.target.value });
+  };
+  const handleChangeCheckbox = (e, id) => {
+    
+    setProfile((prev) => ({
+      ...prev,
+      addresses: prev.addresses.map((address) =>
+        address.id === id ? { ...address, [e.target.name]: e.target.value } : address,
+      ),
+    }));
   };
   useEffect(() => {
     fetchProfile();
@@ -123,336 +132,17 @@ const UserProfilePage = () => {
           </div>
 
           {/* Tabs */}
-          <ProfileTabs
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
+          <ProfileTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-          {/* Content */}
           <div className="p-8">
-            {/* Personal Tab */}
-            {activeTab === "personal" && <PersonalTab profile={profile} onChange={handleChange} />}
-            {activeTab === "addresses" && <AddressTab profile={profile} />}
+            {activeTab === "personal" && (
+              <PersonalTab profile={profile} onChange={handleChange} />
+            )}
+            {activeTab === "addresses" && (
+              <AddressTab profile={profile} onChange={handleChangeCheckbox} />
+            )}
             {activeTab === "orders" && <OrdersTab />}
-            {/* {activeTab === "personal" && (
-              <div>
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">
-                      First Name
-                    </label>
-                    <input
-                      type="text"
-                      name="first_name"
-                      value={
-                        isEditing ? editData.first_name : formData.first_name
-                      }
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg disabled:bg-slate-50 disabled:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">
-                      Last Name
-                    </label>
-                    <input
-                      type="text"
-                      name="last_name"
-                      value={
-                        isEditing ? editData.last_name : formData.last_name
-                      }
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg disabled:bg-slate-50 disabled:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={isEditing ? editData.email : formData.email}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg disabled:bg-slate-50 disabled:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone_number"
-                      value={
-                        isEditing
-                          ? editData.phone_number
-                          : formData.phone_number
-                      }
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg disabled:bg-slate-50 disabled:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                    />
-                  </div>
-                </div>
-              </div>
-            )} */}
-
-            {/* Settings Tab */}
-            {/* {activeTab === "settings" && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-base font-semibold text-slate-900 mb-4">
-                    Preferences
-                  </h3>
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">
-                        Language
-                      </label>
-                      <select
-                        name="preferred_language"
-                        value={
-                          isEditing
-                            ? editData.preferred_language
-                            : formData.preferred_language
-                        }
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg disabled:bg-slate-50 disabled:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                      >
-                        <option value="en">English</option>
-                        <option value="es">Spanish</option>
-                        <option value="fr">French</option>
-                        <option value="de">German</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">
-                        Currency
-                      </label>
-                      <select
-                        name="preferred_currency"
-                        value={
-                          isEditing
-                            ? editData.preferred_currency
-                            : formData.preferred_currency
-                        }
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg disabled:bg-slate-50 disabled:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                      >
-                        <option value="USD">USD</option>
-                        <option value="EUR">EUR</option>
-                        <option value="INR">INR</option>
-                        <option value="GBP">GBP</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border-t border-slate-200 pt-6">
-                  <h3 className="text-base font-semibold text-slate-900 mb-4">
-                    Notifications
-                  </h3>
-                  <div className="space-y-3">
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        name="newsletter_subscription"
-                        checked={
-                          isEditing
-                            ? editData.newsletter_subscription
-                            : formData.newsletter_subscription
-                        }
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-5 h-5 rounded border-slate-300 text-blue-500 focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                      />
-                      <span className="text-sm text-slate-700">
-                        Subscribe to newsletter
-                      </span>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        name="email_notifications"
-                        checked={
-                          isEditing
-                            ? editData.email_notifications
-                            : formData.email_notifications
-                        }
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-5 h-5 rounded border-slate-300 text-blue-500 focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                      />
-                      <span className="text-sm text-slate-700">
-                        Email notifications
-                      </span>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        name="sms_notifications"
-                        checked={
-                          isEditing
-                            ? editData.sms_notifications
-                            : formData.sms_notifications
-                        }
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-5 h-5 rounded border-slate-300 text-blue-500 focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                      />
-                      <span className="text-sm text-slate-700">
-                        SMS notifications
-                      </span>
-                    </label>
-                  </div>
-                </div>
-
-                <div className="border-t border-slate-200 pt-6">
-                  <h3 className="text-base font-semibold text-slate-900 mb-4">
-                    Privacy
-                  </h3>
-                  <div className="space-y-3">
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        name="profile_visibility"
-                        checked={
-                          isEditing
-                            ? editData.profile_visibility
-                            : formData.profile_visibility
-                        }
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-5 h-5 rounded border-slate-300 text-blue-500 focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                      />
-                      <span className="text-sm text-slate-700">
-                        Make profile visible
-                      </span>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        name="show_email"
-                        checked={
-                          isEditing ? editData.show_email : formData.show_email
-                        }
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-5 h-5 rounded border-slate-300 text-blue-500 focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                      />
-                      <span className="text-sm text-slate-700">
-                        Show email publicly
-                      </span>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        name="show_phone_number"
-                        checked={
-                          isEditing
-                            ? editData.show_phone_number
-                            : formData.show_phone_number
-                        }
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-5 h-5 rounded border-slate-300 text-blue-500 focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                      />
-                      <span className="text-sm text-slate-700">
-                        Show phone publicly
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            )} */}
-
-            {/* Addresses Tab */}
-            {/* {activeTab === "addresses" && (
-              <div className="space-y-4">
-                {addresses.map((addr) => (
-                  <div
-                    key={addr.id}
-                    className="border border-slate-200 rounded-lg p-4"
-                  >
-                    <div className="flex justify-between items-start mb-3">
-                      <h4 className="font-semibold text-slate-900">
-                        {addr.full_name}
-                      </h4>
-                      <div className="flex gap-2">
-                        {addr.is_default_shipping && (
-                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
-                            Default
-                          </span>
-                        )}
-                        <button
-                          onClick={() => deleteAddress(addr.id)}
-                          className="text-red-500 hover:text-red-700 text-sm font-medium"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                    <p className="text-sm text-slate-600 mb-2">
-                      {addr.address_line_1}
-                    </p>
-                    <p className="text-sm text-slate-600 mb-3">
-                      {addr.city}, {addr.state} {addr.postal_code},{" "}
-                      {addr.country}
-                    </p>
-                    <p className="text-sm text-slate-600 mb-3">
-                      Phone: {addr.phone_number}
-                    </p>
-                    {!addr.is_default_shipping && (
-                      <button
-                        onClick={() => setDefaultAddress(addr.id)}
-                        className="text-blue-500 hover:text-blue-700 text-sm font-medium"
-                      >
-                        Set as default
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )} */}
-
-            {/* Action Buttons */}
-            {/* <div className="flex gap-3 mt-8 pt-6 border-t border-slate-200">
-              {!isEditing ? (
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="flex-1 px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:shadow-lg transition font-semibold text-sm"
-                >
-                  Edit Profile
-                </button>
-              ) : (
-                <>
-                  <button
-                    onClick={handleSave}
-                    disabled={isSaving}
-                    className="flex-1 flex items-center justify-center gap-2 px-6 py-2.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-semibold text-sm disabled:opacity-60"
-                  >
-                    <Save size={18} />
-                    {isSaving ? "Saving..." : "Save"}
-                  </button>
-                  <button
-                    onClick={handleCancel}
-                    disabled={isSaving}
-                    className="flex-1 flex items-center justify-center gap-2 px-6 py-2.5 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition font-semibold text-sm disabled:opacity-60"
-                  >
-                    <X size={18} />
-                    Cancel
-                  </button>
-                </>
-              )}
-            </div> */}
+          
             <div className="flex gap-1 mt-4">
               <button className="text-black flex items-center gap-2 bg-red-500 px-4 py-2 rounded">
                 Cancel
