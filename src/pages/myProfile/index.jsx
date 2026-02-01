@@ -10,7 +10,7 @@ import {
   User,
   PhoneCall,
 } from "lucide-react";
-import { getUserProfile, updateUserProfile } from "../../services/auth";
+import { getUserProfile, updateAddress, updateUserProfile } from "../../services/auth";
 import { ProfileTabs } from "./profileTabs";
 import { PersonalTab } from "./personalTab";
 import { AddressTab } from "./addressTab";
@@ -19,15 +19,13 @@ import { OrdersTab } from "./ordersTab";
 const UserProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const [activeTab, setActiveTab] = useState("personal");
-
   const fetchProfile = async () => {
     try {
       const response = await getUserProfile();
       if (response.success) {
-        setProfile(response.data);
+        setProfile(response?.data);
       }
 
-      // Map API response to profile structure
     } catch (error) {
       console.error("Failed to fetch profile:", error);
     }
@@ -37,9 +35,7 @@ const UserProfilePage = () => {
       return;
     }
     const res = await updateUserProfile({
-      first_name: profile.first_name,
-      last_name: profile.last_name,
-      phone_number: profile.phone_number,
+      profile
     });
     console.log(res, "res");
     if (res.success) {
@@ -53,14 +49,36 @@ const UserProfilePage = () => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
   const handleChangeCheckbox = (e, id) => {
-    
+    const { name, checked } = e.target
     setProfile((prev) => ({
       ...prev,
       addresses: prev.addresses.map((address) =>
-        address.id === id ? { ...address, [e.target.name]: e.target.value } : address,
+        address.id === id ? { ...address, [name]: checked } : address,
       ),
     }));
   };
+  const handleAddressChange = (e, id) => {
+    console.log(e, id)
+    const { name, value } = e.target;
+
+    setProfile((prev) => ({
+      ...prev,
+      addresses: prev.addresses.map((address) =>
+        address.id === id
+          ? { ...address, [name]: value }
+          : address
+      ),
+    }));
+  };
+  const handleAddressUpdate= async(id)=>{
+    
+    try{
+      const res=updateAddress(id,"")
+    }catch(err){
+      console.log(err)
+    }
+  }
+
   useEffect(() => {
     fetchProfile();
   }, []);
@@ -76,15 +94,6 @@ const UserProfilePage = () => {
           </p>
         </div>
 
-        {/* Success Message */}
-        {/* {successMessage && (
-          <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl animate-pulse">
-            <p className="text-green-700 font-medium text-sm">
-              {successMessage}
-            </p>
-          </div>
-        )} */}
-
         {/* Main Card */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-100">
           {/* Profile Header */}
@@ -96,17 +105,7 @@ const UserProfilePage = () => {
                   alt="Profile"
                   className="w-20 h-20 rounded-full border-4 border-white object-cover shadow-md"
                 />
-                {/* {isEditing && (
-                  <label className="absolute bottom-0 right-0 bg-white rounded-full p-2 cursor-pointer hover:bg-gray-100 transition shadow-md">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="hidden"
-                    />
-                    <Camera size={16} className="text-blue-500" />
-                  </label>
-                )} */}
+
               </div>
               <div>
                 <h2 className="text-2xl font-bold">
@@ -136,24 +135,30 @@ const UserProfilePage = () => {
 
           <div className="p-8">
             {activeTab === "personal" && (
-              <PersonalTab profile={profile} onChange={handleChange} />
+              <>
+                <PersonalTab profile={profile} onChange={handleChange} />
+                <div className="flex gap-1 mt-4">
+                  <button className="text-black flex items-center gap-2 bg-red-500 px-4 py-2 rounded">
+                    Cancel
+                  </button>
+
+                  <button
+                    className="text-black flex items-center gap-2 bg-green-500 px-4 py-2 rounded"
+                    onClick={handleUpdate}
+                  >
+                    Update
+                  </button>
+                </div>
+              </>
             )}
             {activeTab === "addresses" && (
-              <AddressTab profile={profile} onChange={handleChangeCheckbox} />
+                <AddressTab profile={profile} onChangeCheckbox={handleChangeCheckbox} onChangeAddress={handleAddressChange} onUpdateAddress={handleAddressUpdate} />
+
+                
             )}
             {activeTab === "orders" && <OrdersTab />}
-          
-            <div className="flex gap-1 mt-4">
-              <button className="text-black flex items-center gap-2 bg-red-500 px-4 py-2 rounded">
-                Cancel
-              </button>
-              <button
-                className="text-black flex items-center gap-2 bg-green-500 px-4 py-2 rounded"
-                onClick={handleUpdate}
-              >
-                Update
-              </button>
-            </div>
+
+
           </div>
         </div>
       </div>

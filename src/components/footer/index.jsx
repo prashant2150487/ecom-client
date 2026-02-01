@@ -7,7 +7,7 @@ function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="col-span-1">
-            <h3 className="text-2xl font-bold mb-4">E-Shop</h3>
+            <h3 className="text-2xl font-bold mb-4">Good Earth</h3>
             <p className="text-gray-400 text-sm">
               Your one-stop shop for all your needs. Quality products, great prices, and excellent service.
             </p>
