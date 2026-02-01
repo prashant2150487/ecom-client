@@ -2,7 +2,6 @@ import Checkbox from "../../components/uiElement/checkbox";
 import { Input } from "../../components/uiElement/input";
 
 export const AddressTab = ({ profile, onChangeCheckbox, onChangeAddress , onUpdateAddress }) => {
-  console.log(profile, "pp");
   return (
     <div className="text-black">
       {profile?.addresses?.map((address) => (
@@ -60,6 +59,7 @@ export const AddressTab = ({ profile, onChangeCheckbox, onChangeAddress , onUpda
               checked={address.is_default_billing}
               onChange={(e) => onChangeCheckbox(e, address.id)}
               label="Is Default Billing"
+              value={address.is_default_billing}
             />
             <Checkbox
               name="is_default_shipping"
@@ -75,7 +75,7 @@ export const AddressTab = ({ profile, onChangeCheckbox, onChangeAddress , onUpda
 
         <button
           className="text-black flex items-center gap-2 bg-green-500 px-4 py-2 rounded"
-        onClick={onUpdateAddress}
+        onClick={()=>onUpdateAddress(address)}
         >
           Update
         </button>

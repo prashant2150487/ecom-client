@@ -15,6 +15,7 @@ import { ProfileTabs } from "./profileTabs";
 import { PersonalTab } from "./personalTab";
 import { AddressTab } from "./addressTab";
 import { OrdersTab } from "./ordersTab";
+import toast from "react-hot-toast";
 
 const UserProfilePage = () => {
   const [profile, setProfile] = useState(null);
@@ -70,12 +71,20 @@ const UserProfilePage = () => {
       ),
     }));
   };
-  const handleAddressUpdate= async(id)=>{
-    
+  const handleAddressUpdate= async(address)=>{
+    console.log(address,"add")
+    // console.log(id,"idz")
     try{
-      const res=updateAddress(id,"")
+      const res=await updateAddress(address.id,address)
+      console.log(res,"resr")
+      if(res.success){
+        fetchProfile()
+        toast.success("address updated successfully")
+      }
+
+
     }catch(err){
-      console.log(err)
+      console.log(err)  
     }
   }
 

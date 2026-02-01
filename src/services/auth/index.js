@@ -157,7 +157,7 @@ export const updateUserProfile = async (userData) => {
 
 export const updateAddress = async (addId, addressPayload) => {
   const response = await axiosInstance.put(
-    `/auth/address/${addId}`,
+    `/auth/addresses/${addId}`,
     addressPayload,
   );
   return response.data
