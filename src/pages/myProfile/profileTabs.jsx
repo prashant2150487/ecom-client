@@ -1,4 +1,4 @@
-import { Bell, MapPin, User } from "lucide-react";
+import { Bell, MapPin, User, UserCog } from "lucide-react";
 
 export const ProfileTabs = ({ activeTab, setActiveTab, }) => {
   return (
@@ -24,14 +24,14 @@ export const ProfileTabs = ({ activeTab, setActiveTab, }) => {
         <Bell size={16} className="inline mr-2" /> Address
       </button>
       <button
-        onClick={() => setActiveTab("orders")}
+        onClick={() => setActiveTab("userProfile")}
         className={`py-4 px-2 font-semibold text-sm border-b-2 transition ${
-          activeTab === "orders"
+          activeTab === "userProfile"
             ? "border-blue-500 text-blue-600"
             : "border-transparent text-slate-600 hover:text-slate-900"
         }`}
       >
-        <MapPin size={16} className="inline mr-2" /> Orders
+        <UserCog size={16} className="inline mr-2" /> Profile
       </button>
     </div>
   );

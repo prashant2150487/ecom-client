@@ -1,20 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
-  Edit2,
-  Save,
-  X,
   Mail,
-  MapPin,
-  Briefcase,
-  Calendar,
-  User,
   PhoneCall,
 } from "lucide-react";
 import { getUserProfile, updateAddress, updateUserProfile } from "../../services/auth";
 import { ProfileTabs } from "./profileTabs";
 import { PersonalTab } from "./personalTab";
 import { AddressTab } from "./addressTab";
-import { OrdersTab } from "./ordersTab";
+import { UserProfile } from "./userProfile";
 import toast from "react-hot-toast";
 
 const UserProfilePage = () => {
@@ -41,7 +34,6 @@ const UserProfilePage = () => {
     console.log(res, "res");
     if (res.success) {
       setProfile(res.data);
-      // toast.success("Profile updated successfully");
       fetchProfile();
     }
   };
@@ -71,27 +63,26 @@ const UserProfilePage = () => {
       ),
     }));
   };
-  const handleAddressUpdate= async(address)=>{
-    console.log(address,"add")
+  const handleAddressUpdate = async (address) => {
+    console.log(address, "add")
     // console.log(id,"idz")
-    try{
-      const res=await updateAddress(address.id,address)
-      console.log(res,"resr")
-      if(res.success){
+    try {
+      const res = await updateAddress(address.id, address)
+      console.log(res, "resr")
+      if (res.success) {
         fetchProfile()
         toast.success("address updated successfully")
       }
 
 
-    }catch(err){
-      console.log(err)  
+    } catch (err) {
+      console.log(err)
     }
   }
 
   useEffect(() => {
     fetchProfile();
   }, []);
-  console.log(profile, "profile");
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8 px-4">
       <div className="max-w-3xl mx-auto">
@@ -161,11 +152,11 @@ const UserProfilePage = () => {
               </>
             )}
             {activeTab === "addresses" && (
-                <AddressTab profile={profile} onChangeCheckbox={handleChangeCheckbox} onChangeAddress={handleAddressChange} onUpdateAddress={handleAddressUpdate} />
+              <AddressTab profile={profile} onChangeCheckbox={handleChangeCheckbox} onChangeAddress={handleAddressChange} onUpdateAddress={handleAddressUpdate} />
 
-                
+
             )}
-            {activeTab === "orders" && <OrdersTab />}
+            {activeTab === "userProfile" && <UserProfile />}
 
 
           </div>
