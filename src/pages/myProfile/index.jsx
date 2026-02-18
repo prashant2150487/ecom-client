@@ -156,7 +156,7 @@ const UserProfilePage = () => {
 
 
             )}
-            {activeTab === "userProfile" && <UserProfile />}
+            {activeTab === "userProfile" && <UserProfile userData={profile.profile}  />}
 
 
           </div>
