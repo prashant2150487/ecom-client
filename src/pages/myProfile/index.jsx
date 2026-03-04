@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
+import { Mail, PhoneCall } from "lucide-react";
 import {
-  Mail,
-  PhoneCall,
-} from "lucide-react";
-import { getUserProfile, updateAddress, updateUserProfile } from "../../services/auth";
+  getUserProfile,
+  updateAddress,
+  updateUserProfile,
+} from "../../services/auth";
 import { ProfileTabs } from "./profileTabs";
 import { PersonalTab } from "./personalTab";
 import { AddressTab } from "./addressTab";
@@ -19,7 +20,6 @@ const UserProfilePage = () => {
       if (response.success) {
         setProfile(response?.data);
       }
-
     } catch (error) {
       console.error("Failed to fetch profile:", error);
     }
@@ -29,7 +29,7 @@ const UserProfilePage = () => {
       return;
     }
     const res = await updateUserProfile({
-      profile
+      profile,
     });
     console.log(res, "res");
     if (res.success) {
@@ -42,7 +42,7 @@ const UserProfilePage = () => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
   const handleChangeCheckbox = (e, id) => {
-    const { name, checked } = e.target
+    const { name, checked } = e.target;
     setProfile((prev) => ({
       ...prev,
       addresses: prev.addresses.map((address) =>
@@ -51,34 +51,30 @@ const UserProfilePage = () => {
     }));
   };
   const handleAddressChange = (e, id) => {
-    console.log(e, id)
+    console.log(e, id);
     const { name, value } = e.target;
 
     setProfile((prev) => ({
       ...prev,
       addresses: prev.addresses.map((address) =>
-        address.id === id
-          ? { ...address, [name]: value }
-          : address
+        address.id === id ? { ...address, [name]: value } : address,
       ),
     }));
   };
   const handleAddressUpdate = async (address) => {
-    console.log(address, "add")
+    console.log(address, "add");
     // console.log(id,"idz")
     try {
-      const res = await updateAddress(address.id, address)
-      console.log(res, "resr")
+      const res = await updateAddress(address.id, address);
+      console.log(res, "resr");
       if (res.success) {
-        fetchProfile()
-        toast.success("address updated successfully")
+        fetchProfile();
+        toast.success("address updated successfully");
       }
-
-
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   useEffect(() => {
     fetchProfile();
@@ -105,7 +101,6 @@ const UserProfilePage = () => {
                   alt="Profile"
                   className="w-20 h-20 rounded-full border-4 border-white object-cover shadow-md"
                 />
-
               </div>
               <div>
                 <h2 className="text-2xl font-bold">
@@ -152,13 +147,16 @@ const UserProfilePage = () => {
               </>
             )}
             {activeTab === "addresses" && (
-              <AddressTab profile={profile} onChangeCheckbox={handleChangeCheckbox} onChangeAddress={handleAddressChange} onUpdateAddress={handleAddressUpdate} />
-
-
+              <AddressTab
+                profile={profile}
+                onChangeCheckbox={handleChangeCheckbox}
+                onChangeAddress={handleAddressChange}
+                onUpdateAddress={handleAddressUpdate}
+              />
             )}
-            {activeTab === "userProfile" && <UserProfile userData={profile.profile}  />}
-
-
+            {activeTab === "userProfile" && (
+              <UserProfile userData={profile.profile} />
+            )}
           </div>
         </div>
       </div>
